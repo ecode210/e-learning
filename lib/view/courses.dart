@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:e_learning/view/view_pdf.dart';
 import 'package:e_learning/viewmodel/learn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -129,8 +130,7 @@ class _CoursesState extends State<Courses> {
                     itemCount: widget.course.length,
                     itemBuilder: (context, index) {
                       List course = widget.course[index];
-                      return buildCourse(
-                          size, course[0], course[1], course[2], index + 1);
+                      return buildCourse(size, course[0], course[1], index + 1);
                     },
                   ),
                 ),
@@ -142,10 +142,44 @@ class _CoursesState extends State<Courses> {
     );
   }
 
-  Widget buildCourse(var size, String title, subtitle, url, int index) {
-    return InkWell(
-      onTap: () {
-        Provider.of<Learn>(context, listen: false).openFile(url, "$title.pdf");
+  Widget buildCourse(var size, String title, subtitle, int index) {
+    return GestureDetector(
+      onTap: () async {
+        final url = "$title.pdf";
+        final file =
+            await Provider.of<Learn>(context, listen: false).loadStorage(url);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: AspectRatio(
+                aspectRatio: 1 / 1,
+                child: Container(
+                  width: size.width * 0.3,
+                  padding: const EdgeInsets.all(100),
+                  child: const CircularProgressIndicator(
+                    color: Colors.amber,
+                    strokeWidth: 10,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+        Timer(
+          const Duration(seconds: 5),
+          () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewPDF(file: file),
+              ),
+            );
+          },
+        );
       },
       child: Container(
         width: size.width,

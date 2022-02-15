@@ -82,14 +82,17 @@ E-Learning App""",
                         },
                         scaleFactor: 0.4,
                         child: CircleAvatar(
-                          radius: size.height * 0.07,
+                          radius: size.width * 0.13,
                           backgroundColor: Colors.grey.shade800,
                           child: Text(
-                            "GET STARTED",
+                            """
+GET
+STARTED""",
                             textAlign: TextAlign.center,
                             style:
                                 Theme.of(context).textTheme.headline2!.copyWith(
                                       color: Colors.white,
+                                      fontSize: size.width * 0.045,
                                     ),
                           ),
                         ),
